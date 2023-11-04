@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { info, viewing } from '$lib';
+	import type { ProjectInfo } from '$lib/types';
 	import { T } from '@threlte/core';
 	import { Collider } from '@threlte/rapier';
 
 	export let position: [number, number, number] = [0, 0, 0];
+	export let scale: [number, number, number] = [1, 1, 1];
 	
   let sensed = false;
 
@@ -14,11 +16,7 @@
     viewing.set(state);
   }
 
-	export let data: {
-		title: string;
-		description: string;
-		image: string;
-	};
+	export let data: ProjectInfo | null = null;
 </script>
 
 <T.Group {position}>
@@ -27,6 +25,6 @@
 		on:sensorexit={() => sensed = false}
 		sensor
 		shape={'cuboid'}
-		args={[1, 1, 1]}
+		args={scale}
 	/>
 </T.Group>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { info, viewing } from '$lib';
-  import App from '$lib/components/App.svelte'
+  import App from '$lib/App.svelte'
   $: if ($viewing === false) {
     info.set(null)
   }

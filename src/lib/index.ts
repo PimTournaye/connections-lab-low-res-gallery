@@ -1,6 +1,26 @@
-// place files you want to import through the `$lib` alias in this folder
+import { writable, type Writable } from "svelte/store";
+import type { Player, ProjectInfo } from "./types";
 
-import { writable } from "svelte/store";
+/**
+ * Stores the info for a project you are viewing. Is null if you are not viewing a project.
+ */
+export const info: Writable<ProjectInfo> = writable();
 
-export const info = writable();
-export const viewing = writable(false);
+/**
+ * A store to indicate whether or not you are viewing a project.
+ */
+export const viewing: Writable<boolean> = writable(false);
+
+/**
+ * A store that keeps track of the other players in the room.
+ */
+export const otherPlayers: Writable<Player[]> = writable([]);
+
+export const player = writable({
+  id: null,
+  username: "",
+  color: '#000000',
+  x: null,
+  y: null,
+  room: null
+})

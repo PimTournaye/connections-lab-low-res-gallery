@@ -1,16 +1,17 @@
 <script lang="ts">
 	import { T, useFrame, useThrelte } from '@threlte/core';
-	import { CollisionGroups, Debug } from '@threlte/rapier';
+	import { AutoColliders, CollisionGroups, Debug, RigidBody } from '@threlte/rapier';
 	import { spring } from 'svelte/motion';
 	import { Mesh, Vector3 } from 'three';
-	import Ground from './Ground.svelte';
+	import Ground from '../Ground.svelte';
 	import Player from './Player.svelte';
-	import Sensor from './Sensor.svelte';
 	import { projects } from '$lib/data';
 	import { viewing } from '$lib';
+	import TestSceneWithCamera from './models/TestSceneWithCamera.svelte';
 
 	import { tweened } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
+	import TestV2 from './models/TestV2.svelte';
 
 	let playerMesh: Mesh;
 	let positionHasBeenSet = false;
@@ -48,32 +49,19 @@
 	});
 	// Camera zoom based on window size
 	$: zoom = $size.width / $camera;
-
-
 </script>
 
-<T.Group position.x={$smoothPlayerPosX} position.z={$smoothPlayerPosZ}>
-	<T.Group position.y={0.9} let:ref={target}>
-		<T.OrthographicCamera
-			makeDefault
-			{zoom}
-			position={[50, 50, 30]}
-			on:create={({ ref }) => {
-				ref.lookAt(target.getWorldPosition(new Vector3()));
-			}}
-		/>
-	</T.Group>
-</T.Group>
+<!-- <T.DirectionalLight castShadow position={[8, 20, -3]} />
+<T.AmbientLight intensity={0.5} /> -->
 
-<T.DirectionalLight castShadow position={[8, 20, -3]} />
 
 <!-- <T.GridHelper args={[50]} position.y={0.01} /> -->
 
 <Debug depthTest={false} depthWrite={false} />
 
-<Sensor data={projects[0]} position={[0, 1, 0]} />
+<!-- <Sensor data={projects[0]} position={[0, 1, 0]} />
 <Sensor data={projects[1]} position={[5, 1, 0]} />
-<Sensor data={projects[2]} position={[-5, 1, 0]} />
+<Sensor data={projects[2]} position={[-5, 1, 0]} /> -->
 
 <!--
 	The ground needs to be on both group 15 which is the group
@@ -82,12 +70,17 @@
 	interacting with.
  -->
 <CollisionGroups groups={[0, 15]}>
-	<Ground />
+	<RigidBody>
+		<AutoColliders shape="trimesh">
+			<!-- <TestSceneWithCamera /> -->
+			<TestV2 project={projects[0]}/>
+		</AutoColliders>
+	</RigidBody>
 </CollisionGroups>
 
 <!--
 	All physically interactive stuff should be on group 0
 -->
 <CollisionGroups groups={[0]}>
-	<Player bind:playerMesh position={[0, 2, -3]} />
+	<Player bind:playerMesh position={[0,2, 0]} />
 </CollisionGroups>

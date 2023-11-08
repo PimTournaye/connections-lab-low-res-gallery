@@ -79,23 +79,26 @@
 		if (keys.left) newPos[0] -= speed;
 		if (keys.right) newPos[0] += speed;
 
-		if (oldPosition !== newPos) {
-			//  Update player position
-			player.set({
-				id: socket.id,
-				username: $player.username,
-				color: $player.color,
-				x: newPos[0],
-				y: newPos[1],
-				z: newPos[2]
-			});
-			position = newPos;
-			// Emit our new position
+		// If our position has changed, emit it to the server
+		if (
+			oldPosition[0] !== newPos[0] ||
+			oldPosition[1] !== newPos[1] ||
+			oldPosition[2] !== newPos[2]) {
 			socket.emit('location', $player);
-
 		}
-		 // assign the new array to position
-		 oldPosition = position;
+		position = [...newPos];
+		// Update our old position 
+		oldPosition = [...newPos];
+
+		// Update our player info
+		player.set({
+			id: socket.id,
+			username: $player.username,
+			color: $player.color,
+			x: newPos[0],
+			y: newPos[1],
+			z: newPos[2]
+		});
 	});
 </script>
 

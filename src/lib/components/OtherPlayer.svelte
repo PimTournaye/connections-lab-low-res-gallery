@@ -31,7 +31,7 @@
 	scale={0.8}
 />
 
-<HTML position.y={1}>
+<HTML {position}>
 	<div class="player-name">
 		<p>{name}</p>
 	</div>

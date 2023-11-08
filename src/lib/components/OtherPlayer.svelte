@@ -22,8 +22,9 @@
 </script>
 
 <T.Mesh
-	{position}
-	position.y={-0.2 + y / 12}
+	position.x={position[0]}
+	position.y={0}
+	position.z={position[2]}
 	receiveShadow
 	castShadow
 	geometry={new CapsuleGeometry(0.3, 1.8 - 0.3 * 2)}

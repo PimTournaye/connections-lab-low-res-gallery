@@ -4,7 +4,7 @@
 	import { HTML } from '@threlte/extras';
 
 	export let position = [0, 0, 0]!;
-	export let color: string = '#ff000';
+	export let color: string = '#ff0000';
 	export let name: string = 'Player';
 	let y = 0;
 
@@ -45,5 +45,6 @@
 		color: white;
 		text-shadow: 0 0 10px black;
 		font-weight: bold;
+		opacity: 0.5;
 	}
 </style>

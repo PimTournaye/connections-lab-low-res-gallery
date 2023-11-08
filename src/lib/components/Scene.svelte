@@ -35,12 +35,12 @@
 	const { size } = useThrelte();
 
 	// Camera stuff
-	let zoomLevel = 16;
+	let zoomLevel = 5000;
 	$: if ($viewing) {
-		zoomLevel = 8;
+		zoomLevel = 800;
 		camera.set(zoomLevel)
 	} else {
-		zoomLevel = 16;
+		zoomLevel = 1000;
 		camera.set(zoomLevel)
 	}
 	// Smooth camera zoom
@@ -63,13 +63,14 @@
   on:create={({ ref }) => {
     ref.lookAt(0, 1, 0)
   }}
+	{zoom}
 >
 	<OrbitControls />
 </T.PerspectiveCamera>
 
 <!-- <T.GridHelper args={[50]} position.y={0.01} /> -->
 
-<Debug depthTest={false} depthWrite={false} />
+<!-- <Debug depthTest={false} depthWrite={false} /> -->
 
 <!-- {#each player in players}
 	<Player position={[0, 0, 0]} color={player.color} />

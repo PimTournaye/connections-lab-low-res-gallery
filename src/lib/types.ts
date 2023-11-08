@@ -7,10 +7,9 @@ export type ProjectInfo = {
 } | null;
 
 export type Player = {
-  id: string,
   username: string,
   color: string,
   x: number,
   y: number,
-  room?: string,
+  z: number,
 };

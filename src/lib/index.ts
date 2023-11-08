@@ -1,6 +1,12 @@
 import { writable, type Writable } from "svelte/store";
 import type { Player, ProjectInfo } from "./types";
 
+	// Socket setup
+	import { io } from "socket.io-client";
+
+	export const socket = io("https://round-ahead-salt.glitch.me");
+
+
 /**
  * Stores the info for a project you are viewing. Is null if you are not viewing a project.
  */
@@ -17,10 +23,11 @@ export const viewing: Writable<boolean> = writable(false);
 export const otherPlayers: Writable<Player[]> = writable([]);
 
 export const player = writable({
-  id: null,
   username: "",
   color: '#000000',
-  x: null,
-  y: null,
-  room: null
+  x: 0,
+  y: 0,
+  z: 0,
 })
+
+export const submittedInfo = writable(false);

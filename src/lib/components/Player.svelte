@@ -5,7 +5,7 @@
 
 	export let position = [0, 0, 0]!;
 	export let color: string = '#000000';
-	export let name: string = 'Player';
+	export let name: string = 'Me';
 
 	let y = 0;
 

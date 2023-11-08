@@ -1,63 +1,109 @@
 <script lang="ts">
-	import { player } from '$lib';
-  import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { T, useFrame } from '@threlte/core'
-  import { BasicPlayerController } from '@threlte/rapier'
-  import { CapsuleGeometry, Color, Mesh, MeshStandardMaterial, Vector3 } from 'three'
+	import { CapsuleGeometry, Color, Mesh, MeshStandardMaterial, Vector3 } from 'three';
+	import { T, useFrame } from '@threlte/core';
+	import { HTML } from '@threlte/extras';
 
-  export let position: Parameters<Vector3['set']> | undefined = undefined
+	export let position = [0, 0, 0]!;
+	export let color: string = '#000000';
+	export let name: string = 'Player';
 
-  export let playerMesh: Mesh
-  let rigidBody: RapierRigidBody
+	let y = 0;
 
-  const playerPos = new Vector3()
-  const ballPos = new Vector3()
-  const maxF = 0.05
-  const min = new Vector3(-maxF, 0, -maxF)
-  const max = new Vector3(maxF, 0, maxF)
-  const material = new MeshStandardMaterial({color: new Color($player.color as string)})
+	const playerPos = new Vector3();
+	const material = new MeshStandardMaterial({ color: new Color(color as string) });
 
-  let y = 0;
+	function levitate() {
+		const time = Date.now() / 1000;
+		const speed = 1.8;
+		const offset = 1;
+		y = Math.sin(time * speed) + offset;
+		requestAnimationFrame(levitate);
+	};
+	levitate();
 
-  function levitate() {
-		const time = Date.now() / 1000
-		const speed = 1
-		const offset = 1
-		y = Math.sin(time * speed) + offset
-    
-		requestAnimationFrame(levitate)
+	const speed = 0.03;
+	const keys = {
+		up: false,
+		down: false,
+		left: false,
+		right: false
+	};
+
+	// Listening for arrow keys
+	function onKeyDown(e: KeyboardEvent) {
+		switch (e.key) {
+			case 'ArrowDown':
+				keys.down = true;
+				break;
+			case 'ArrowUp':
+				keys.up = true;
+				break;
+			case 'ArrowLeft':
+				keys.left = true;
+				break;
+			case 'ArrowRight':
+				keys.right = true;
+				break;
+			default:
+				break;
+		}
 	}
-  levitate()
+	
+	function onKeyUp(e: KeyboardEvent) {
+		switch (e.key) {
+			case 'ArrowDown':
+				keys.down = false;
+				break;
+			case 'ArrowUp':
+				keys.up = false;
+				break;
+			case 'ArrowLeft':
+				keys.left = false;
+				break;
+			case 'ArrowRight':
+				keys.right = false;
+				break;
+			default:
+				break;
+		}
+	}
 
-  useFrame(() => {
-    if (!playerMesh || !rigidBody) return
-    playerMesh.getWorldPosition(playerPos)
-
-    const diff = playerPos.sub(ballPos).divideScalar(2000)
-    diff.y = 0
-
-    const f = diff.clamp(min, max)
-
-    rigidBody.applyImpulse(f, true)
-  })
+	useFrame(() => {
+		let newPos = [...position]; // create a new array
+		if (keys.down) newPos[2] += speed;
+		if (keys.up) newPos[2] -= speed;
+		if (keys.left) newPos[0] -= speed;
+		if (keys.right) newPos[0] += speed;
+		position = newPos; // assign the new array to position
+	});
 </script>
 
-<!-- To detect the groundedness of the player, a collider on group 15 is used -->
-<BasicPlayerController
-  {position}
-  speed={3}
-  radius={0.3}
-  height={1.8}
-  jumpStrength={2}
-  groundCollisionGroups={[15]}
-  playerCollisionGroups={[0]}
->
-  <T.Mesh
-    bind:ref={playerMesh}
-    position.y={0.9 + (y /36)}
-    receiveShadow
-    castShadow
-    geometry={new CapsuleGeometry(0.3, 1.8 - 0.3 * 2)}
-    material={material}
-  />
-</BasicPlayerController>
+<svelte:window on:keydown|preventDefault={onKeyDown} on:keyup={onKeyUp} />
+
+<T.Mesh
+	{position}
+	position.y={-0.2 + y / 12}
+	receiveShadow
+	castShadow
+	geometry={new CapsuleGeometry(0.3, 1.8 - 0.3 * 2)}
+	{material}
+	scale={0.8}
+/>
+
+<HTML
+position={position} 
+position.y={1}>
+	<div class="player-name">
+		<p>{name}</p>
+	</div>
+</HTML>
+
+<style>
+	p {
+		text-align: center;
+		font-size: 24px;
+		color: white;
+		text-shadow: 0 0 10px black;
+		font-weight: bold;
+	}
+</style>

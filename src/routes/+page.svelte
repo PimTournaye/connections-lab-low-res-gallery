@@ -13,8 +13,7 @@
 	// });
 
 	socket.on("location", (players: Player[]) => {
-		// console.log(players);
-		
+		console.log(players);
 		allPlayers.set(players);
 	});
 

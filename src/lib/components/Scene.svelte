@@ -7,7 +7,6 @@
 	import { Environment, GLTF, OrbitControls } from '@threlte/extras'
 	import { tweened } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
-	import Sensor from './Sensor.svelte';
 	import Player from './Player.svelte';
 	import OtherPlayer from './OtherPlayer.svelte';
 
@@ -45,6 +44,8 @@
 			}
 		}
 }
+
+$: console.log($allPlayers)
 	
 </script>
 

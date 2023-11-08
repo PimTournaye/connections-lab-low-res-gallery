@@ -70,7 +70,7 @@
 		}
 	}
 
-	let oldPosition;
+	let oldPosition = [...position];
 
 	useFrame(() => {
 		let newPos = [...position]; // create a new array
@@ -78,8 +78,6 @@
 		if (keys.up) newPos[2] -= speed;
 		if (keys.left) newPos[0] -= speed;
 		if (keys.right) newPos[0] += speed;
-		position = newPos; // assign the new array to position
-		oldPosition = newPos;
 
 		if (oldPosition !== newPos) {
 			//  Update player position
@@ -87,13 +85,17 @@
 				id: socket.id,
 				username: $player.username,
 				color: $player.color,
-				x: position[0],
-				y: position[1],
-				z: position[2]
+				x: newPos[0],
+				y: newPos[1],
+				z: newPos[2]
 			});
+			position = newPos;
 			// Emit our new position
 			socket.emit('location', $player);
+
 		}
+		 // assign the new array to position
+		 oldPosition = position;
 	});
 </script>
 

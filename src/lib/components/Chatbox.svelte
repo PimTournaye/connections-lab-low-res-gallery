@@ -34,7 +34,7 @@
 	});
 </script>
 
-<div>
+<div id="full">
 	<section id="logo">
 		<img src="small-logo.png" alt="small logo of gallery" />
 	</section>
@@ -47,12 +47,12 @@
 			</p>
 			{/each}
 		</section>
-		<section id="form">
+		<div id="form">
 			<input id="chat-input" type="text" bind:value={message}>
 			<section id="btn-input">
 				<button on:click|preventDefault={sendMessage}>SEND</button>
 			</section>
-		</section>
+		</div>
 	</section>
 </div>
 
@@ -131,7 +131,7 @@
 		margin-bottom: 0;
 	}
 
-	div {
+	#full {
 		background-color: #fcfce0;
 		font-family: 'Montserrat', sans-serif;
 		width: 100vw;

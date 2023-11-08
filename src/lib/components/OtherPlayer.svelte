@@ -3,7 +3,7 @@
 	import { T } from '@threlte/core';
 	import { HTML } from '@threlte/extras';
 
-	export let position = [0, 0, 0]!;
+	export let position = [0, 0, 0];
 	export let color: string = '#ff0000';
 	export let name: string = 'Player';
 	let y = 0;

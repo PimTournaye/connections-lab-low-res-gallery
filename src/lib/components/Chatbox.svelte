@@ -5,7 +5,7 @@
 
 	// Setting up functionality for chat room
 	// Message variable is binded to the input field to react to user input
-	let message = '';
+	let message = "";
 	// Making the array of the chat history reactive to easily add new messages
 	let chat = writable<ChatMessage[]>([]);
 
@@ -48,7 +48,8 @@
 			{/each}
 		</section>
 		<div id="form">
-			<input id="chat-input" type="text" bind:value={message}>
+			<!-- <input id="chat-input" bind:value={message}> -->
+			<input bind:value={message} id="chat-input">
 			<section id="btn-input">
 				<button on:click|preventDefault={sendMessage}>SEND</button>
 			</section>

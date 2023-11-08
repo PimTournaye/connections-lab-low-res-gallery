@@ -1,5 +1,6 @@
 <script lang="ts">
 	import "../app.css"
+	import "../small-logo.png"
 
 	socket.on('connect', () => {
     console.log('Client side connected');
@@ -43,7 +44,7 @@
 		{/if}
 	</aside>
 	<div>
-		<h1>Gallery Floor</h1>
+		<h1>GALLERY FLOOR</h1>
 		<App />
 	</div>
   <section>
@@ -55,7 +56,7 @@
 	:global(body) {
 		margin: 0;
 		overflow: hidden;
-		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		font-family: 'Montserrat', sans-serif;
 	}
 
 	div {
@@ -71,7 +72,7 @@
     width: 20vw;
     height: 100vh;
     background: rgb(13, 19, 32);
-    background: linear-gradient(180deg, rgba(13, 19, 32, 1) 0%, rgba(8, 12, 21, 1) 100%);
+	background-color: #fcfce0;
     position: absolute;
     right: 0;
     color: white;
@@ -79,9 +80,13 @@
 
 	h1 {
 		margin: 0;
-		width: 80vw;
-		color: white;
-		background-color: #FCFCE0;
+		width: 80vw - 5px;
+		height: auto;
+		color: #A994B3;
+		background-color: #D9D9D9;
+		font-size: 20px;
+		padding: 5px;
+		font-weight: 600;
 	}
 
 	aside {

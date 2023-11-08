@@ -4,7 +4,7 @@
 	import { HTML } from '@threlte/extras';
 	import { player, socket } from '$lib';
 
-	export let position = [0, 0, 0]!;
+	export let position = [0, 0, 0];
 	export let color: string = '#000000';
 	export let name: string = 'Me';
 
@@ -18,7 +18,7 @@
 		const offset = 1;
 		y = Math.sin(time * speed) + offset;
 		requestAnimationFrame(levitate);
-	};
+	}
 	levitate();
 
 	const speed = 0.03;
@@ -49,10 +49,9 @@
 				break;
 		}
 	}
-	
+
 	function onKeyUp(e: KeyboardEvent) {
 		// console.log(e.key, 'up');
-		
 		switch (e.key) {
 			case 'ArrowDown':
 				keys.down = false;
@@ -71,6 +70,8 @@
 		}
 	}
 
+	let oldPosition;
+
 	useFrame(() => {
 		let newPos = [...position]; // create a new array
 		if (keys.down) newPos[2] += speed;
@@ -78,15 +79,21 @@
 		if (keys.left) newPos[0] -= speed;
 		if (keys.right) newPos[0] += speed;
 		position = newPos; // assign the new array to position
-		//  Update player position
-		player.set({
-			username: $player.username,
-			color: $player.color,
-			x: position[0],
-			y: position[1],
-			z: position[2]
-		});
-		socket.emit('location', $player);
+		oldPosition = newPos;
+
+		if (oldPosition !== newPos) {
+			//  Update player position
+			player.set({
+				id: socket.id,
+				username: $player.username,
+				color: $player.color,
+				x: position[0],
+				y: position[1],
+				z: position[2]
+			});
+			// Emit our new position
+			socket.emit('location', $player);
+		}
 	});
 </script>
 
@@ -102,9 +109,7 @@
 	scale={0.8}
 />
 
-<HTML
-position={position} 
-position.y={1}>
+<HTML {position} position.y={1}>
 	<div class="player-name">
 		<p>{name}</p>
 	</div>

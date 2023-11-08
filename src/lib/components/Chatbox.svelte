@@ -9,6 +9,9 @@
 	// Making the array of the chat history reactive to easily add new messages
 	let chat = writable<ChatMessage[]>([]);
 
+	$: console.log(message);
+	
+
 	// Sending messages
 	const sendMessage = () => {
 		// If the message is empty, don't send it
@@ -28,9 +31,6 @@
 	socket.on('message', (msgInfo: ChatMessage) => {
 		// Adding the new message to the chat history
 		chat.update((oldChat) => [...oldChat, msgInfo]);
-
-		// Scroll to the bottom of the chat
-		const messagesSection = document.getElementById('messages-section');
 	});
 </script>
 
@@ -48,7 +48,7 @@
 			{/each}
 		</section>
 		<section id="form">
-			<input id="chat-input" type="text" bind:value={message} /><br />
+			<input id="chat-input" type="text" bind:value={message}>
 			<section id="btn-input">
 				<button on:click|preventDefault={sendMessage}>SEND</button>
 			</section>

@@ -12,6 +12,7 @@
     
     // Update our player info
     player.set({ 
+      id: socket.id,
       username: username,
       color: color,
       x: 0,
@@ -20,9 +21,9 @@
      });
     // emit data
     socket.emit('data', $player);
-
     // Update our submittedInfo
     submittedInfo.set(true);
+
   };
 </script>
 

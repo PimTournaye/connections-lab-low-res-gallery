@@ -7,12 +7,14 @@
     console.log(socket.id);
 	});
 
-	socket.on('disconnect', () => {
-		console.log('Client side disconnected');
-		socket.emit('disconnect', $player);
-	});
+	// socket.on('disconnect', () => {
+	// 	console.log('Client side disconnected');
+	// 	socket.emit('disconnect', $player);
+	// });
 
 	socket.on("location", (players: Player[]) => {
+		// console.log(players);
+		
 		allPlayers.set(players);
 	});
 
@@ -27,7 +29,11 @@
 	$: if ($viewing === false) {
 		info.set(null);
 	}
-	$: console.log($info);
+
+	$: if ($submittedInfo === true) {
+		socket.emit('hello', $player);
+	}
+	// $: console.log($info);
 
 </script>
 
@@ -95,7 +101,7 @@
 		width: 79vw;
 		height: 30vh;
 		background-color: #fcfce0;
-		padding: 5px;
+		/* padding: 5px; */
 		/* margin: 10px; */
 	}
 </style>

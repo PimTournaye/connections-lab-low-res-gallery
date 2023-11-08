@@ -5,7 +5,7 @@
   $: if ($viewing === false) {
     info.set(null);
   }
-  $: console.log($info);
+  // $: console.log($info);
 
 </script>
 
@@ -20,7 +20,7 @@
 			<h2>{$info.author}</h2>
 			<p>{$info.description}</p>
 			{#if $info.link}
-				<p> More can be found out <a href={$info.link}>here</a> <p>
+				<p> More can be found out <a href={$info.link} target="_blank">here</a> <p>
 			{/if}
 		</section>
 	</div>
@@ -37,44 +37,51 @@
 		width: 100%;
 		display: flex;
 		flex-direction: row;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
+		/* margin-top: 8px; */
+		/* flex-wrap: wrap; */
+		/* justify-content: center; */
+		/* align-items: center; */
 	}
 
 	#info-sect {
 		display: flex;
 		flex-direction: column;
 		flex-wrap: wrap;
-		justify-content: center;
+		/* justify-content: center; */
 		align-items: flex-start;
+		margin-left: 16px;
+		margin-right: 16px;
+		width: 60%;
 	}
 
 	h1 {
-		font-size: 20px;
+		font-size: 25px;
+		margin-bottom: 4px;
 	}
 
 	h2{
-		font-size: 15px;
+		font-size: 20px;
 		font-style: italic;
 	}
 
 	p {
-		font-size: 12px;
+		font-size: 16px;
 		color: #222222;
 	}
 
 	#image-sect{
-		margin: 0;
+		margin: 0 ;
 		display: flex;
 		flex-direction: row;
 		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
+		/* justify-content: center; */
+		/* align-items: center; */
+		width: 40%;
+		height: 100%;
 	}
 
 	img {
-		width: 70%;
-		height: auto;
+		max-width: 100%;
+		max-height: 100%;
 	}
 </style>

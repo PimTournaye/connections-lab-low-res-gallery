@@ -21,6 +21,7 @@ export const viewing: Writable<boolean> = writable(false);
 export const allPlayers: Writable<Player[]> = writable([]);
 
 export const player = writable({
+  id: '',
   username: "",
   color: '#000000',
   x: 0,

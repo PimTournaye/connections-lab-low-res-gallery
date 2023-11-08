@@ -2,6 +2,7 @@
 	import { CapsuleGeometry, Color, Mesh, MeshStandardMaterial, Vector3 } from 'three';
 	import { T, useFrame } from '@threlte/core';
 	import { HTML } from '@threlte/extras';
+	import { player, socket } from '$lib';
 
 	export let position = [0, 0, 0]!;
 	export let color: string = '#000000';
@@ -9,7 +10,6 @@
 
 	let y = 0;
 
-	const playerPos = new Vector3();
 	const material = new MeshStandardMaterial({ color: new Color(color as string) });
 
 	function levitate() {
@@ -31,6 +31,7 @@
 
 	// Listening for arrow keys
 	function onKeyDown(e: KeyboardEvent) {
+		// console.log(e.key, 'down');
 		switch (e.key) {
 			case 'ArrowDown':
 				keys.down = true;
@@ -50,6 +51,8 @@
 	}
 	
 	function onKeyUp(e: KeyboardEvent) {
+		// console.log(e.key, 'up');
+		
 		switch (e.key) {
 			case 'ArrowDown':
 				keys.down = false;
@@ -75,6 +78,15 @@
 		if (keys.left) newPos[0] -= speed;
 		if (keys.right) newPos[0] += speed;
 		position = newPos; // assign the new array to position
+		//  Update player position
+		player.set({
+			username: $player.username,
+			color: $player.color,
+			x: position[0],
+			y: position[1],
+			z: position[2]
+		});
+		socket.emit('location', $player);
 	});
 </script>
 

@@ -1,24 +1,62 @@
 <script lang="ts">
+	import { player, socket } from '$lib';
+	import type { ChatMessage } from '$lib/types';
+	import { writable } from 'svelte/store';
+
+	// Setting up functionality for chat room
+	// Message variable is binded to the input field to react to user input
+	let message = '';
+	// Making the array of the chat history reactive to easily add new messages
+	let chat = writable<ChatMessage[]>([]);
+
+	// Sending messages
+	const sendMessage = () => {
+		// If the message is empty, don't send it
+		if (message === '') return;
+		const msgInfo = {
+			username: $player.username,
+			color: $player.color,
+			message: message
+		};
+		// Emitting the message to the server
+		socket.emit('message', msgInfo);
+		// Reset the message variable
+		message = '';
+	};
+
+	// Listening for messages
+	socket.on('message', (msgInfo: ChatMessage) => {
+		// Adding the new message to the chat history
+		chat.update((oldChat) => [...oldChat, msgInfo]);
+
+		// Scroll to the bottom of the chat
+		const messagesSection = document.getElementById('messages-section');
+	});
 </script>
 
 <div>
 	<section id="logo">
-		<img src="small-logo.png" alt="small logo of gallery">
+		<img src="small-logo.png" alt="small logo of gallery" />
 	</section>
 	<section id="chat-room">
 		<h2>CHAT ROOM</h2>
-		<section id="messages-section" />
-		<form id="form">
-			<input id="chat-input" /><br>
+		<section id="messages-section">
+			{#each $chat as message}
+			<p>
+				<span style="color: {message.color}">{message.username}</span>: {message.message}
+			</p>
+			{/each}
+		</section>
+		<section id="form">
+			<input id="chat-input" type="text" bind:value={message} /><br />
 			<section id="btn-input">
-			<button>SEND</button>
+				<button on:click|preventDefault={sendMessage}>SEND</button>
 			</section>
-		</form>
+		</section>
 	</section>
 </div>
 
 <style>
-
 	#logo {
 		width: 20vw;
 		height: auto;
@@ -28,15 +66,18 @@
 		margin-top: 30px;
 		width: 100%;
 		height: auto;
+;
 	}
 
 	span {
 		color: rgb(34, 34, 34);
+		font-size: 13px;
 	}
 
 	#chat-room {
 		width: 20vw;
 		height: auto;
+		/* padding-bottom: 200px; */
 		background-color: #a994b3;
 	}
 
@@ -44,6 +85,7 @@
 		background-color: #c0b6c5;
 		margin: 10px;
 		padding: 5px;
+		height: 70vh;
 		/* position: fixed;
         bottom: 20px;
         right: 150px;
@@ -51,7 +93,7 @@
         height: auto; */
 	}
 
-	form {
+	#form {
 		margin: 10px;
 		/* width: 100%; */
 		display: flex;
@@ -65,9 +107,12 @@
 	input {
 		width: 70%;
 		margin: 3px 0px;
+		margin-bottom: 10px;
 	}
 
 	p {
+		font-size: 13px;
+		color: #222222;
 		display: flex;
 		background-color: white;
 		border-radius: 3px;
@@ -83,6 +128,7 @@
 		font-weight: 600;
 		font-size: 20px;
 		padding: 3px 5px;
+		margin-bottom: 0;
 	}
 
 	div {
@@ -93,6 +139,7 @@
 	}
 	#btn-input {
 		margin: 3px 0px;
+		margin-bottom: 10px;
 	}
 
 	button {
@@ -101,7 +148,7 @@
 		color: #a994b3;
 		font-weight: 600;
 		/* -webkit-text-stroke: 0.5px grey; */
-		background-color: #FCFCE0;
+		background-color: #fcfce0;
 		border-style: none;
 		border-radius: 5px;
 		cursor: pointer;

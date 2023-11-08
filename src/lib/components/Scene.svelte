@@ -3,16 +3,15 @@
 	import { AutoColliders, CollisionGroups, Debug } from '@threlte/rapier';
 	import { spring } from 'svelte/motion';
 	import { Mesh, Vector3 } from 'three';
-	import Player from './OtherPlayer.svelte';
 	import { projects } from '$lib/data';
-	import { info, viewing } from '$lib';
+	import { info, viewing, player, projectPositions, allPlayers } from '$lib';
 
-
-	import { Environment, GLTF, HTML, OrbitControls } from '@threlte/extras'
+	import { Environment, GLTF, OrbitControls } from '@threlte/extras'
 	import { tweened } from 'svelte/motion';
 	import { cubicInOut } from 'svelte/easing';
-	import OtherPlayer from './Player.svelte';
-	import Sensor from '$lib/Sensor.svelte';
+	import Sensor from './Sensor.svelte';
+	import Player from './Player.svelte';
+	import OtherPlayer from './OtherPlayer.svelte';
 
 	let playerMesh: Mesh;
 	let positionHasBeenSet = false;
@@ -50,6 +49,24 @@
 	});
 	// Camera zoom based on window size
 	$: zoom = $size.width / $camera;
+
+	$: if($player) {
+		// if player position x, y and z one of the positions in the array of positions of the projects, then log that project
+		const pos = [
+			Math.round($player.x),
+			Math.round($player.y - 2), //adjusting for charcter pos in y axis
+			Math.round($player.z)
+		]
+		// Checking for player position in array of project positions
+		for (let i = 0; i < projectPositions.length; i++){
+			if(pos[0] === projectPositions[i][0] && pos[1] === projectPositions[i][1] && pos[2] === projectPositions[i][2]) {
+					info.set(projects[i])
+			}
+		}
+
+
+}
+	
 </script>
 
 <!-- <T.DirectionalLight castShadow position={[8, 20, -3]} /> -->
@@ -68,13 +85,8 @@
 	<OrbitControls />
 </T.PerspectiveCamera>
 
-<!-- <T.GridHelper args={[50]} position.y={0.01} /> -->
-
 <!-- <Debug depthTest={false} depthWrite={false} /> -->
 
-<!-- {#each player in players}
-	<Player position={[0, 0, 0]} color={player.color} />
-{/each} -->
 
 <!-- <Sensor data={projects[0]} position={[0, 1, 0]} />
 <Sensor data={projects[1]} position={[5, 1, 0]} />
@@ -103,11 +115,17 @@
 <Sensor data={projects[6]} position={[-5, 0, -7]} />
 <Sensor data={projects[7]} position={[-5, 0, -11]} />
 
+
 <!--
 	All physically interactive stuff should be on group 0
 -->
 <CollisionGroups groups={[0]}>
-	<Player position={[0,2, 0]} />
+	<Player position={[0,2, 0]} name={$player.username} color={$player.color}/>
+	{#each $allPlayers as otherPlayer}
+		{#if otherPlayer.username !== $player.username}
+			<OtherPlayer position={[otherPlayer.x, otherPlayer.y, otherPlayer.z]} name={otherPlayer.username} color={otherPlayer.color}/>
+		{/if}
+	{/each}
 </CollisionGroups>
 
-<OtherPlayer position={[0, 0, 0]} />
+<!-- <Player position={[0,2, 0]} name={$player.username}/> -->

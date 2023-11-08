@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { CapsuleGeometry, Color, Mesh, MeshStandardMaterial, Vector3 } from 'three';
-	import { T, useFrame } from '@threlte/core';
+	import { CapsuleGeometry, Color, MeshStandardMaterial } from 'three';
+	import { T } from '@threlte/core';
 	import { HTML } from '@threlte/extras';
 
 	export let position = [0, 0, 0]!;
@@ -8,7 +8,6 @@
 	export let name: string = 'Player';
 	let y = 0;
 
-	const playerPos = new Vector3();
 	const material = new MeshStandardMaterial({ color: new Color(color as string) });
 
 	function levitate() {
@@ -32,7 +31,7 @@
 	scale={0.8}
 />
 
-<HTML position={position} position.y={1}>
+<HTML position.y={1}>
 	<div class="player-name">
 		<p>{name}</p>
 	</div>

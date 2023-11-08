@@ -9,14 +9,20 @@
 
 	socket.on('disconnect', () => {
 		console.log('Client side disconnected');
+		socket.emit('disconnect', $player);
+	});
+
+	socket.on("location", (players: Player[]) => {
+		allPlayers.set(players);
 	});
 
 
-
-	import { info, socket, submittedInfo, viewing } from '$lib';
+	import { allPlayers, info, player, socket, submittedInfo, viewing } from '$lib';
 	import App from '$lib/App.svelte';
 	import Form from "$lib/components/Form.svelte";
 	import Chatbox from "$lib/components/Chatbox.svelte";
+	import ProjectInfo from "$lib/components/ProjectInfo.svelte";
+	import type { Player } from "$lib/types";
 
 	$: if ($viewing === false) {
 		info.set(null);
@@ -32,16 +38,8 @@
 {#if $submittedInfo === false}
 	<Form />
 {:else}
-	<aside style:viewing={'opacity: 1'}>
-		{#if $info}
-			<h1>{$info.title}</h1>
-			<h2>{$info.author}</h2>
-			<img src={$info.image} alt="">
-			<p>{$info.description}</p>
-			{#if $info.link}
-				<a href={$info.link}>Link</a>
-			{/if}
-		{/if}
+	<aside>
+		<ProjectInfo />
 	</aside>
 	<div>
 		<h1>GALLERY FLOOR</h1>
@@ -94,9 +92,10 @@
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		width: 20vw;
-		height: 40vh;
-		background-color: white;
-		opacity: 0;
+		width: 79vw;
+		height: 30vh;
+		background-color: #fcfce0;
+		padding: 5px;
+		/* margin: 10px; */
 	}
 </style>
